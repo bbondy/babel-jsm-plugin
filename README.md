@@ -2,7 +2,7 @@
 
 Babel plugin for converting ES6 modules into JavaScript code modules (JSM).
 
-Babel module formatters are obsolete and in place plugins should be used.  This plugin allows you to write ES6 code and export a JSM module which can be used for Gecko development or for add-on authors.
+This is a Babel plugin and it supersedes the olds way of doing module formatters.  This plugin allows you to write ES6 code and export a JSM module which can be used for Gecko development or for add-on authors.
 
 ## Usage
 
