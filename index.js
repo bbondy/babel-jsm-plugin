@@ -1,20 +1,25 @@
+var exportIds = [];
+function exportEnterHandler(node, parent) {
+  // For variable declarations since exports will have multiple id names in one
+  if (node.declaration.declarations) {
+    node.declaration.declarations.forEach(function(declaration) {
+      exportIds.push(declaration.id.name);
+    }.bind(this));
+    return node.declaration;
+  }
+  exportIds.push(node.declaration.id.name);
+  // Replace with declarations, which removes the export
+  return node.declaration;
+}
+
 module.exports = function (babel) {
-  var exportIds = [];
   var t = babel.types;
   return new babel.Transformer("babel-jsm-plugin", {
     ExportNamedDeclaration: {
-      enter: function(node, parent) {
-        // For variable declarations since exports will have multiple id names in one
-        if (node.declaration.declarations) {
-          node.declaration.declarations.forEach(function(declaration) {
-            exportIds.push(declaration.id.name);
-          }.bind(this));
-          return node.declaration;
-        }
-        exportIds.push(node.declaration.id.name);
-        // Replace with declarations, which removes the export
-        return node.declaration;
-      },
+      enter: exportEnterHandler.bind(this),
+    },
+    ExportDefaultDeclaration: {
+      enter: exportEnterHandler.bind(this),
     },
     Program: {
       exit: function(node, parent) {
