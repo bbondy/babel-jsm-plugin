@@ -18,20 +18,20 @@ module.exports = function (babel) {
     },
     Program: {
       exit: function(node, parent) {
-        var arrayOfSymbols = t.ArrayExpression([]);
+        var arrayOfSymbols = t.arrayExpression([]);
         exportIds.forEach(function(exportedId) {
           // Create an array of strings with the export identifier names
           arrayOfSymbols.elements.push(t.literal(exportedId));
 
           // Add in this.identifier = identifier for each export and add it to the end
-          var assignmentStatement = t.ExpressionStatement(
-            t.assignmentExpression('=', t.Identifier('this.' + exportedId), t.Identifier(exportedId)));
+          var assignmentStatement = t.expressionStatement(
+            t.assignmentExpression('=', t.identifier('this.' + exportedId), t.identifier(exportedId)));
           this.pushContainer('body', assignmentStatement);
         }.bind(this));
 
         // Create an assignment for this.EXPORTED_SYMBOLS = ['export1', 'export2', ...]
-        var exportsVar = t.ExpressionStatement(
-          t.assignmentExpression('=', t.Identifier('this.EXPORTED_SYMBOLS'), arrayOfSymbols));
+        var exportsVar = t.expressionStatement(
+          t.assignmentExpression('=', t.identifier('this.EXPORTED_SYMBOLS'), arrayOfSymbols));
         this.unshiftContainer('body', exportsVar);
       },
     },
